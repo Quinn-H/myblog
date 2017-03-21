@@ -1,12 +1,12 @@
-import React, { PropTypes } from "react"
-import Helmet from "react-helmet"
-import warning from "warning"
-import { BodyContainer, joinUri, Link } from "phenomic"
+import React, { PropTypes } from 'react'
+import Helmet from 'react-helmet'
+import invariant from 'invariant'
+import { BodyContainer, joinUri } from 'phenomic'
 
-import Button from "../../components/Button"
-import Loading from "../../components/Loading"
+import Loading from '../../components/Loading'
+import NavigationMenu from '../../components/NavigationMenu'
 
-import styles from "./index.css"
+import styles from './index.css'
 
 const Page = (
   {
@@ -17,96 +17,81 @@ const Page = (
     body,
     header,
     footer,
-    children,
+    children
   },
   {
-    metadata: { pkg },
+    metadata: { pkg }
   }
 ) => {
-  warning(
-    typeof head.title === "string",
-    `Your page '${ __filename }' needs a title`
+  invariant(
+    typeof head.title === 'string',
+    `Your page '${__filename}' needs a title`
   )
 
   const metaTitle = head.metaTitle ? head.metaTitle : head.title
 
-  const socialImage = head.hero && head.hero.match("://") ? head.hero
-    : joinUri(process.env.PHENOMIC_USER_URL, head.hero)
-
   const meta = [
-    { property: "og:type", content: "article" },
-    { property: "og:title", content: metaTitle },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:title', content: metaTitle },
     {
-      property: "og:url",
-      content: joinUri(process.env.PHENOMIC_USER_URL, __url),
+      property: 'og:url',
+      content: joinUri(process.env.PHENOMIC_USER_URL, __url)
     },
-    { property: "og:image", content: socialImage },
-    { property: "og:description", content: head.description },
-    { name: "twitter:card", content: "summary" },
-    { name: "twitter:title", content: metaTitle },
-    { name: "twitter:creator", content: `@${ pkg.twitter }` },
-    { name: "twitter:description", content: head.description },
-    { name: "twitter:image", content: socialImage },
-    { name: "description", content: head.description },
+    { property: 'og:description', content: head.description },
+    { name: 'twitter:card', content: 'summary' },
+    { name: 'twitter:title', content: metaTitle },
+    { name: 'twitter:creator', content: `@${pkg.twitter}` },
+    { name: 'twitter:description', content: head.description },
+    { name: 'description', content: head.description }
   ]
 
+  let link = []
+  if (head.latex) {
+    link = [
+      {'rel': 'stylesheet', 'href': 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css', 'async': undefined}
+    ]
+  }
   return (
-    <div className={ styles.page }>
+    <section className={styles.page}>
       <Helmet
-        title={ metaTitle }
-        meta={ meta }
+        title={metaTitle}
+        meta={meta}
+        link={link}
       />
-      {
-        <div
-          className={ styles.hero }
-          style={ head.hero && {
-            background: `#111 url(${ head.hero }) 50% 50% / cover`,
-          } }
-        >
-          <div className={ styles.header }>
-            <div className={ styles.wrapper }>
-              <h1 className={ styles.heading }>{ head.title }</h1>
-              {
-                head.cta &&
-                <Link to={ head.cta.link }>
-                  <Button className={ styles.cta } light { ...head.cta.props }>
-                    { head.cta.label }
-                  </Button>
-                </Link>
-              }
-            </div>
-          </div>
-        </div>
-      }
-      <div className={ styles.wrapper + " " + styles.pageContent }>
+      <NavigationMenu />
+      <main className={styles.main}>
+        {
+          head.title &&
+          <h2 className={styles.heading}>{ head.title }</h2>
+        }
         { header }
-        <div className={ styles.body }>
-          {
-            isLoading
-            ? <Loading />
-            : <BodyContainer>{ body }</BodyContainer>
-          }
-        </div>
+        {
+          isLoading
+          ? <Loading />
+          : <BodyContainer>
+            { body }
+          </BodyContainer>
+        }
         { children }
         { footer }
-      </div>
-    </div>
+      </main>
+    </section>
   )
 }
 
 Page.propTypes = {
-  children: PropTypes.node,
   isLoading: PropTypes.bool,
+  children: PropTypes.node,
   __filename: PropTypes.string,
   __url: PropTypes.string,
   head: PropTypes.object.isRequired,
   body: PropTypes.string,
   header: PropTypes.element,
-  footer: PropTypes.element,
+  footer: PropTypes.element
 }
 
 Page.contextTypes = {
-  metadata: PropTypes.object.isRequired,
+  metadata: PropTypes.object.isRequired
 }
 
 export default Page

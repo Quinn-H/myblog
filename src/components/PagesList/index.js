@@ -1,8 +1,9 @@
-import React, { PropTypes } from "react"
+import React, { PropTypes } from 'react'
 
-import PagePreview from "../PagePreview"
+import PagePreview from '../PagePreview'
 
-import styles from "./index.css"
+const featuredImageLimit = 5
+const descriptionLimit = 5
 
 const PagesList = ({ pages }) => {
   return (
@@ -10,22 +11,26 @@ const PagesList = ({ pages }) => {
       {
       pages.length
       ? (
-        <ul className={ styles.list }>
+        <ul>
           {
-          pages.map((page) => (
-            <li key={ page.title }><PagePreview { ...page } /></li>
-          ))
+          pages.map((page, i) => {
+            let pageProps = {...page}
+            if (i >= featuredImageLimit) delete pageProps.featured
+            if (i >= descriptionLimit) delete pageProps.description
+            return (<li key={pageProps.title}><PagePreview {...pageProps} /></li>)
+          }
+          )
         }
         </ul>
       )
-      : "No posts yet."
+      : 'No posts yet.'
     }
     </div>
   )
 }
 
 PagesList.propTypes = {
-  pages: PropTypes.array.isRequired,
+  pages: PropTypes.array.isRequired
 }
 
 export default PagesList

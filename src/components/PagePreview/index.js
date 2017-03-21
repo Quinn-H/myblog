@@ -1,33 +1,34 @@
-import React, { PropTypes } from "react"
-import { Link } from "phenomic"
+import React, { PropTypes } from 'react'
+import { Link } from 'react-router'
+import { CategoryBar } from '../../components'
+import styles from './index.css'
 
-import Button from "../../components/Button"
-
-import styles from "./index.css"
-
-const PagePreview = ({ __url, title, date, description }) => {
+const PagePreview = ({ __url, title, date, description, featured, categories }) => {
   const pageDate = date ? new Date(date) : null
-
   return (
-    <div className={ styles.wrapper }>
-      <Link to={ __url } className={ styles.title }>
+    <div className={styles.clear}>
+      <Link to={__url}>
         { title }
       </Link>
-      <div className={ styles.meta }>
+      <small className={styles.small}>
+        <CategoryBar categories={categories} />
         {
-          pageDate &&
-            <time key={ pageDate.toISOString() }>
-              { pageDate.toDateString() }
-            </time>
-        }
-      </div>
-      <div className={ styles.description }>
-        { description }
-        { " " }
-      </div>
-      <Link to={ __url } className={ styles.readMore }>
-        <Button secondary>{ "Read More →" }</Button>
-      </Link>
+        pageDate &&
+          <time key={pageDate.toISOString()}>
+            { pageDate.toDateString() }
+          </time>
+      }
+      </small>
+      {
+        featured &&
+        <span className={styles.featuredWrapper}>
+          <img src={featured} className={styles.featured} />
+        </span>
+      }
+      {
+        description &&
+        <p>{description}</p>
+      }
     </div>
   )
 }
@@ -37,6 +38,8 @@ PagePreview.propTypes = {
   title: PropTypes.string.isRequired,
   date: PropTypes.string,
   description: PropTypes.string,
+  featured: PropTypes.string,
+  categories: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default PagePreview
