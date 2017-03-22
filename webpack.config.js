@@ -3,28 +3,59 @@ import path from "path"
 import webpack from "webpack"
 import ExtractTextPlugin from "extract-text-webpack-plugin"
 import { phenomicLoader } from "phenomic"
-import PhenomicLoaderFeedWebpackPlugin
-  from "phenomic/lib/loader-feed-webpack-plugin"
-import PhenomicLoaderSitemapWebpackPlugin
-  from "phenomic/lib/loader-sitemap-webpack-plugin"
+import PhenomicLoaderFeedWebpackPlugin from "phenomic/lib/loader-feed-webpack-plugin"
 
 import pkg from "./package.json"
 
-export default (config = {}) => {
+// My plugins
+import parseMath from './src/plugins/markdown-math'
 
-  // hot loading for postcss config
-  // until this is officially supported
-  // https://github.com/postcss/postcss-loader/issues/66
-  const postcssPluginFile = require.resolve("./postcss.config.js")
-  const postcssPlugins = (webpackInstance) => {
-    webpackInstance.addDependency(postcssPluginFile)
-    delete require.cache[postcssPluginFile]
-    return require(postcssPluginFile)(config)
-  }
+// config.source points to 'content' https://github.com/MoOx/phenomic/blob/d18307ed474038a82e13105078ed199fbf6b83a2/src/configurator/definitions.js
+// config.destination points to 'dist'
+
+export default (config = {}) => {
+  const postcssPlugins = () => [
+    require("stylelint")(),
+    require('postcss-import')({
+      addDependencyTo: webpack
+      /* Is equivalent to
+      onImport: function (files) {
+        files.forEach(this.addDependency)
+      }.bind(webpack)
+      */
+    }),
+    require("postcss-cssnext")({
+      browsers: "last 2 versions",
+      features: {
+        customProperties: {
+          variables: require("./src/styling.js").default
+        },
+      },
+    }),
+    require("postcss-reporter")(),
+    ...!config.production ? [
+      require("postcss-browser-reporter")(),
+    ] : [],
+  ]
 
   return {
     ...config.dev && {
       devtool: "#cheap-module-eval-source-map",
+    },
+    phenomic: {
+      plugins: [
+        ...require("phenomic/lib/loader-preset-default").default,
+        parseMath,
+        require("phenomic/lib/loader-plugin-markdown-transform-body-property-to-html").default,
+        obj => require("phenomic/lib/loader-plugin-markdown-init-head.description-property-from-content").default(
+        {...obj,
+        options:
+          {
+            ...obj.options,
+            pruneLength: 200
+          }
+        }),
+      ]
     },
     module: {
       noParse: /\.min\.js/,
@@ -42,10 +73,6 @@ export default (config = {}) => {
           loader: phenomicLoader,
           query: {
             context: path.join(__dirname, config.source),
-            // plugins: [
-            //   ...require("phenomic/lib/loader-preset-markdown").default
-            // ]
-            // see https://phenomic.io/docs/usage/plugins/
           },
         },
 
@@ -157,7 +184,7 @@ export default (config = {}) => {
           // include: path.resolve(__dirname, "node_modules"),
           loader: ExtractTextPlugin.extract(
             "style-loader",
-            [
+            loader: [
               "css-loader",
               "postcss-loader",
             ].join("!")
@@ -194,21 +221,49 @@ export default (config = {}) => {
         //
         // LESS: npm install --save-dev less less-loader
         // https://github.com/webpack/less-loader
-
         // copy assets and return generated path in js
+        // with hash
         {
-          test: /\.(html|ico|jpe?g|png|gif|eot|otf|webp|ttf|woff|woff2)$/,
+          test: /(\/|\\).*\.(html|eot|otf|webp|ttf|woff|woff2)$/,
           loader: "file-loader",
           query: {
-            name: "[path][name].[hash].[ext]",
+            name: "[path][name][hash].[ext]",
             context: path.join(__dirname, config.source),
           },
         },
-
+        // copy images without hash
+        // images not in posts/ are treated as usual
+        {
+          test: /\.(ico|jpe?g|png|gif)$/,
+          loader: "file-loader",
+          exclude: [
+            path.resolve(__dirname, "content/posts"),
+          ],
+          query: {
+            name: "[path][name].[ext]",
+            context: path.join(__dirname, config.source),
+          },
+        },
+        // copy images+svg from posts/ over by stripping post off. Also without hash
+        {
+          test: /\.(ico|jpe?g|png|gif|svg)$/,
+          loader: "file-loader",
+          include: [
+            path.resolve(__dirname, "content/posts"),
+          ],
+          query: {
+            // [path] the path of the resource relative to the context query parameter or option.
+            name: "[path][name].[ext]",
+            context: path.join(__dirname, 'content/posts'), // 'strip' posts off it
+          },
+        },
         // svg as raw string to be inlined
         {
           test: /\.svg$/,
           loader: "raw-loader",
+          exclude: [
+            path.resolve(__dirname, "content/posts"),
+          ],
         },
       ],
     },
@@ -238,26 +293,23 @@ export default (config = {}) => {
 
       new PhenomicLoaderFeedWebpackPlugin({
         // here you define generic metadata for your feed
-        feedsOptions: {
+        feedsOptions: { // as in npm.js rss package: https://www.npmjs.com/package/rss
           title: pkg.name,
           site_url: pkg.homepage,
+          image_url: `${pkg.homepage}/assets/favicon.png`
         },
         feeds: {
           // here we define one feed, but you can generate multiple, based
           // on different filters
           "feed.xml": {
             collectionOptions: {
-              filter: { layout: "Post" },
+              filter: ({ layout, categories }) => (layout === 'Post' || layout === 'ProgressReport'),
               sort: "date",
               reverse: true,
               limit: 20,
             },
           },
         },
-      }),
-
-      new PhenomicLoaderSitemapWebpackPlugin({
-        site_url: pkg.homepage,
       }),
 
       // webpack 1

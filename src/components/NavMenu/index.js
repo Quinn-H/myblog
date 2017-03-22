@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Bio, SocialBar } from '..'
+import { Bio } from './Bio'
+import { SocialBar } from './SocialBar'
 import styles from './index.css'
 import { Link } from 'react-router'
 
-export default class NavigationMenu extends Component {
+export default class NavMenu extends Component {
   render () {
     /* 17 pixels is size of scrollbar */
     return (
@@ -16,6 +17,7 @@ export default class NavigationMenu extends Component {
             <Link to={`/portfolio`}>Portfolio</Link>
           </div>
           <SocialBar />
+          <LatestTweet />
         </div>
       </nav>
     )
