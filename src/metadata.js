@@ -6,5 +6,5 @@ export default {
   twitter: 'https://twitter.com/realQuinnHu',
   github: 'https://github.com/Quinn-H',
   linkedin: 'https://linkedin.com/in/quinnhu',
-  authorName: 'Web Developer'
+  authorName: 'Web Developer | Emoji Power User🔥'
 }

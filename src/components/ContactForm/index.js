@@ -5,7 +5,7 @@ export default class ContactForm extends Component {
   render () {
     return (
       <div>
-        <h2>Contact</h2>
+        <h2>☎️ Contact ☎️</h2>
         <h4>I'm I'm happy to get in touch with you. Just fill out the form below and I'll get back to you.</h4>
         <form method='POST' action='http://formspree.io/hawkeye.hu@gmail.com'>
           <input type='text' id='name' className='required' name='name' placeholder='name' autoComplete='off' required />
