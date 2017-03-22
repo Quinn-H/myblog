@@ -1,5 +1,7 @@
 :root {
   --nav-item-padding: 0.5rem;
+  --colorNeutralLight: #FBFCFC;
+  --maxWidth: 60rem;
 }
 
 .header {

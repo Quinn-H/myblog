@@ -25,6 +25,12 @@ body {
 /*
  * page styles
  */
+
+:root {
+  --colorPrimary: #007acc;
+  --colorText: #555;
+}
+
 html {
   min-height: 100%;
   background: color(var(--colorPrimary) l(99%));
@@ -73,6 +79,11 @@ body {
 }
 
 /* minimal styling, prefer removing this and use local styles */
+
+:root {
+  --colorNeutral: #8C8D91;
+}
+
 a {
   color: inherit;
   text-decoration: none;

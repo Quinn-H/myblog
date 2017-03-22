@@ -135,6 +135,8 @@
     "whatwg-fetch": "^0.11.0"
   },
   "dependencies": {
+    "he": "^1.1.1",
+    "katex": "^0.7.1",
     "react-disqus-thread": "^0.4.0"
   }
 }
