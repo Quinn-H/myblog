@@ -5,5 +5,6 @@ export default {
   pkg,
   twitter: 'https://twitter.com/realQuinnHu',
   github: 'https://github.com/Quinn-H',
-  authorName: 'Quinn Hu'
+  linkedin: 'https://linkedin.com/in/quinnhu',
+  authorName: 'Web Developer'
 }

@@ -1,11 +1,11 @@
-import path from "path"
+import path from 'path'
 
-import webpack from "webpack"
-import ExtractTextPlugin from "extract-text-webpack-plugin"
-import { phenomicLoader } from "phenomic"
-import PhenomicLoaderFeedWebpackPlugin from "phenomic/lib/loader-feed-webpack-plugin"
+import webpack from 'webpack'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
+import { phenomicLoader } from 'phenomic'
+import PhenomicLoaderFeedWebpackPlugin from 'phenomic/lib/loader-feed-webpack-plugin'
 
-import pkg from "./package.json"
+import pkg from './package.json'
 
 // My plugins
 import parseMath from './src/plugins/markdown-math'
@@ -15,7 +15,7 @@ import parseMath from './src/plugins/markdown-math'
 
 export default (config = {}) => {
   const postcssPlugins = () => [
-    require("stylelint")(),
+    require('stylelint')(),
     require('postcss-import')({
       addDependencyTo: webpack
       /* Is equivalent to
@@ -24,30 +24,30 @@ export default (config = {}) => {
       }.bind(webpack)
       */
     }),
-    require("postcss-cssnext")({
-      browsers: "last 2 versions",
+    require('postcss-cssnext')({
+      browsers: 'last 2 versions',
       features: {
         customProperties: {
-          variables: require("./src/styling.js").default
+          variables: require('./src/styling.js').default
         },
       },
     }),
-    require("postcss-reporter")(),
+    require('postcss-reporter')(),
     ...!config.production ? [
-      require("postcss-browser-reporter")(),
+      require('postcss-browser-reporter')(),
     ] : [],
   ]
 
   return {
     ...config.dev && {
-      devtool: "#cheap-module-eval-source-map",
+      devtool: '#cheap-module-eval-source-map',
     },
     phenomic: {
       plugins: [
-        ...require("phenomic/lib/loader-preset-default").default,
+        ...require('phenomic/lib/loader-preset-default').default,
         parseMath,
-        require("phenomic/lib/loader-plugin-markdown-transform-body-property-to-html").default,
-        obj => require("phenomic/lib/loader-plugin-markdown-init-head.description-property-from-content").default(
+        require('phenomic/lib/loader-plugin-markdown-transform-body-property-to-html').default,
+        obj => require('phenomic/lib/loader-plugin-markdown-init-head.description-property-from-content').default(
         {...obj,
         options:
           {
@@ -80,19 +80,19 @@ export default (config = {}) => {
         // (not handled by webpack by default)
         {
           test: /\.json$/,
-          loader: "json-loader",
+          loader: 'json-loader',
         },
 
         // *.js => babel + eslint
         {
           test: /\.js$/,
           include: [
-            path.resolve(__dirname, "scripts"),
-            path.resolve(__dirname, "src"),
+            path.resolve(__dirname, 'scripts'),
+            path.resolve(__dirname, 'src'),
           ],
           loaders: [
-            "babel-loader?cacheDirectory",
-            "eslint-loader" + (config.dev ? "?emitWarning" : ""),
+            'babel-loader?cacheDirectory',
+            'eslint-loader' + (config.dev ? '?emitWarning' : ''),
           ],
         },
 
@@ -104,36 +104,36 @@ export default (config = {}) => {
         {
           test: /\.css$/,
           exclude: /\.global\.css$/,
-          include: path.resolve(__dirname, "src"),
+          include: path.resolve(__dirname, 'src'),
           // webpack 1
           loader: ExtractTextPlugin.extract(
-            "style-loader",
+            'style-loader',
             [ `css-loader?modules&localIdentName=${
               config.production
-              ? "[hash:base64:5]"
-              : "[path][name]--[local]--[hash:base64:5]"
+              ? '[hash:base64:5]'
+              : '[path][name]--[local]--[hash:base64:5]'
               }`,
-              "postcss-loader",
-            ].join("!"),
+              'postcss-loader',
+            ].join('!'),
           ),
           // webpack 2
           /*
           loader: ExtractTextPlugin.extract({
-            fallbackLoader: "style-loader",
+            fallbackLoader: 'style-loader',
             loader: [
               {
-                loader: "css-loader",
+                loader: 'css-loader',
                 query: {
                   modules: true,
                   localIdentName: (
                     config.production
-                    ? "[hash:base64:5]"
-                    : "[path][name]--[local]--[hash:base64:5]"
+                    ? '[hash:base64:5]'
+                    : '[path][name]--[local]--[hash:base64:5]'
                   ),
                 },
               },
               {
-                loader: "postcss-loader",
+                loader: 'postcss-loader',
                 // query for postcss can't be used right now
                 // https://github.com/postcss/postcss-loader/issues/99
                 // meanwhile, see webpack.LoaderOptionsPlugin in plugins list
@@ -146,20 +146,20 @@ export default (config = {}) => {
         // *.global.css => global (normal) css
         {
           test: /\.global\.css$/,
-          include: path.resolve(__dirname, "src"),
+          include: path.resolve(__dirname, 'src'),
           // webpack 1
           loader: ExtractTextPlugin.extract(
-            "style-loader",
-            [ "css-loader", "postcss-loader" ].join("!"),
+            'style-loader',
+            [ 'css-loader', 'postcss-loader' ].join('!'),
           ),
           // webpack 2
           /*
           loader: ExtractTextPlugin.extract({
-            fallbackLoader: "style-loader",
+            fallbackLoader: 'style-loader',
             loader: [
-              "css-loader",
+              'css-loader',
               {
-                loader: "postcss-loader",
+                loader: 'postcss-loader',
                 // query for postcss can't be used right now
                 // https://github.com/postcss/postcss-loader/issues/99
                 // meanwhile, see webpack.LoaderOptionsPlugin in plugins list
@@ -181,13 +181,13 @@ export default (config = {}) => {
           // depending on your need, you might need to scope node_modules
           // for global CSS if you want to keep CSS Modules by default
           // for your own CSS. If so, uncomment the line below
-          // include: path.resolve(__dirname, "node_modules"),
+          // include: path.resolve(__dirname, 'node_modules'),
           loader: ExtractTextPlugin.extract(
-            "style-loader",
+            'style-loader',
             loader: [
-              "css-loader",
-              "postcss-loader",
-            ].join("!")
+              'css-loader',
+              'postcss-loader',
+            ].join('!')
           ),
         },
         */
@@ -198,14 +198,14 @@ export default (config = {}) => {
           // depending on your need, you might need to scope node_modules
           // for global CSS if you want to keep CSS Modules by default
           // for your own CSS. If so, uncomment the line below
-          // include: path.resolve(__dirname, "node_modules"),
+          // include: path.resolve(__dirname, 'node_modules'),
           loader: ExtractTextPlugin.extract({
-            fallbackLoader: "style-loader",
+            fallbackLoader: 'style-loader',
             loader: [
-              "css-loader",
+              'css-loader',
               {
-                loader: "postcss-loader",
-                query: { "plugins": postcssPlugins },
+                loader: 'postcss-loader',
+                query: { 'plugins': postcssPlugins },
               },
             ]
           }),
@@ -225,9 +225,9 @@ export default (config = {}) => {
         // with hash
         {
           test: /(\/|\\).*\.(html|eot|otf|webp|ttf|woff|woff2)$/,
-          loader: "file-loader",
+          loader: 'file-loader',
           query: {
-            name: "[path][name][hash].[ext]",
+            name: '[path][name][hash].[ext]',
             context: path.join(__dirname, config.source),
           },
         },
@@ -235,34 +235,34 @@ export default (config = {}) => {
         // images not in posts/ are treated as usual
         {
           test: /\.(ico|jpe?g|png|gif)$/,
-          loader: "file-loader",
+          loader: 'file-loader',
           exclude: [
-            path.resolve(__dirname, "content/posts"),
+            path.resolve(__dirname, 'content/posts'),
           ],
           query: {
-            name: "[path][name].[ext]",
+            name: '[path][name].[ext]',
             context: path.join(__dirname, config.source),
           },
         },
         // copy images+svg from posts/ over by stripping post off. Also without hash
         {
           test: /\.(ico|jpe?g|png|gif|svg)$/,
-          loader: "file-loader",
+          loader: 'file-loader',
           include: [
-            path.resolve(__dirname, "content/posts"),
+            path.resolve(__dirname, 'content/posts'),
           ],
           query: {
             // [path] the path of the resource relative to the context query parameter or option.
-            name: "[path][name].[ext]",
+            name: '[path][name].[ext]',
             context: path.join(__dirname, 'content/posts'), // 'strip' posts off it
           },
         },
         // svg as raw string to be inlined
         {
           test: /\.svg$/,
-          loader: "raw-loader",
+          loader: 'raw-loader',
           exclude: [
-            path.resolve(__dirname, "content/posts"),
+            path.resolve(__dirname, 'content/posts'),
           ],
         },
       ],
@@ -276,7 +276,7 @@ export default (config = {}) => {
       /*
       // You should be able to remove the block below when the following
       // issue has been correctly handled (and postcss-loader supports
-      // "plugins" option directly in query, see postcss-loader usage above)
+      // 'plugins' option directly in query, see postcss-loader usage above)
       // https://github.com/postcss/postcss-loader/issues/99
       new webpack.LoaderOptionsPlugin({
         test: /\.css$/,
@@ -301,10 +301,10 @@ export default (config = {}) => {
         feeds: {
           // here we define one feed, but you can generate multiple, based
           // on different filters
-          "feed.xml": {
+          'feed.xml': {
             collectionOptions: {
               filter: ({ layout, categories }) => (layout === 'Post' || layout === 'ProgressReport'),
-              sort: "date",
+              sort: 'date',
               reverse: true,
               limit: 20,
             },
@@ -313,11 +313,11 @@ export default (config = {}) => {
       }),
 
       // webpack 1
-      new ExtractTextPlugin("[name].[hash].css", { disable: config.dev }),
+      new ExtractTextPlugin('[name].[hash].css', { disable: config.dev }),
       // webpack 2
       /*
       new ExtractTextPlugin({
-        filename: "[name].[hash].css",
+        filename: '[name].[hash].css',
         disable: config.dev,
       }),
       */
@@ -336,18 +336,18 @@ export default (config = {}) => {
     output: {
       path: path.join(__dirname, config.destination),
       publicPath: config.baseUrl.pathname,
-      filename: "[name].[hash].js",
+      filename: '[name].[hash].js',
     },
 
     // webpack 1
     resolve: {
-      extensions: [ ".js", ".json", "" ],
-      root: [ path.join(__dirname, "node_modules") ],
+      extensions: [ '.js', '.json', '' ],
+      root: [ path.join(__dirname, 'node_modules') ],
     },
-    resolveLoader: { root: [ path.join(__dirname, "node_modules") ] },
+    resolveLoader: { root: [ path.join(__dirname, 'node_modules') ] },
     // webpack 2
     /*
-    resolve: { extensions: [ ".js", ".json" ] },
+    resolve: { extensions: [ '.js', '.json' ] },
     */
   }
 }

@@ -26,7 +26,7 @@ const Post = (props) => {
     >
       {isClientSide()
       ? <ReactDisqusThread
-        shortname='cmichel'
+        shortname='Quinn'
         identifier={props.head.disqus_identifier ? props.head.disqus_identifier : url}
         title={props.head.title}
         url={url} />
