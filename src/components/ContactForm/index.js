@@ -1,34 +1,21 @@
 import React, { Component } from 'react'
 
 export default class ContactForm extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {reveal: false}
-    }
 
-    render() {
-        let decoded = this.encodeMail('L@HMaBLHBIDMHN')
-        return (
-            <section>
-            <h2>Contact</h2>
-            If you want to get in touch with me, just write a mail or contact me on Twitter.
-            <div>{'E-Mail: '}
-            {this.state.reveal ? <a href={`mailto:${decoded}`}>{`${decoded}`}</a> : <a onClick={this.onReveal}>Click to reveal</a>}
-            <noscript>Please enable Javascript to see the email address.</noscript>
-            </div>
-            </section>
-        )
-    }
+  render () {
+    return (
+      <div>
+        <h2>Contact</h2>
+        <h4>I'm I'm happy to get in touch with you. Just fill out the form below and I'll get back to you.</h4>
+        <form method='POST' action='http://formspree.io/hawkeye.hu@gmail.com'>
+          <input type='text' id='name' className='required' name='name' placeholder='name' autoComplete='off' required />
+          <input type='email' id='email' className='required' name='email' autoComplete='on' placeholder='Your email' required />
+          <textarea name='message' placeholder='message' className='required' required />
+          <button type='submit' className='submitSend'>SEND MESSAGE</button>
+          <button type='reset' className='submitClear'>CLEAR FORM</button>
+        </form>
+      </div>
+    )
+  }
 
-    encodeMail(mail) {
-        let encoded = ''
-        for(let i = 0; i < mail.length; i++){
-            encoded += String.fromCharCode(mail.charCodeAt(i) ^ 33)
-        }
-        return encoded
-    }
-
-    onReveal = () => {
-        this.setState({reveal: true})
-    }
 }
