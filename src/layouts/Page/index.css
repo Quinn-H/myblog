@@ -1,4 +1,5 @@
 @import '../../media-queries.css';
+@custom-media --single-column only screen and (max-width: 850px);
 
 .page {
   max-width: var(--pageWidth);
