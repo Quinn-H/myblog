@@ -27,26 +27,24 @@ export default class Weather extends Component {
         })
     }).catch(
       _this.setState({
-        location: 'Cannot get location.',
+        location: '☀️  ☔️',
         temp: null
       })
     )
   }
 
   render () {
-    let hr = (new Date).getHours()
-    let tod = (hr >= 17) ? 'night' : 'day'
+    let icons = `http://openweathermap.org/img/w/${this.state.weather.icon}.png`
     return (
-      <div className='container'>
-        <h1>Local Weather</h1>
-        <div className='location'>
+      <div>
+        <h1>Weather</h1>
+        <div>
           <h2>{this.state.location}</h2>
           <p>{this.state.weather.main}</p>
-          <i className={'wi wi-owm-' + tod + '-' + this.state.weather.id}></i>
+          <img src={icons} />
           {this.state.temp &&
-            <p>{this.state.temp} &#176;{this.state.format}</p>
+            <h3>{this.state.temp} &#176;{this.state.format}</h3>
           }
-          {this.state.temp}
         </div>
       </div>
     )

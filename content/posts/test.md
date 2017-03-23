@@ -2,6 +2,7 @@
 title: test.
 date: 2017-01-22
 layout: Post
+disqus_identifier: 20170122
 ---
 
 This is the first post!

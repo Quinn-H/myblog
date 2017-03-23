@@ -8,7 +8,9 @@ export default class SocialBar extends Component {
     return (
       <div className='horizontalContainer clearUnderline' style={{ justifyContent: 'space-around', width: '100%', margin: `1.5rem 0` }}>
         <SocialIcon url={metadata.twitter} color={primaryColor} />
-        <SocialIcon url={metadata.github} color={primaryColor} />
+        <SocialIcon url={metadata.github} color='black' />
+        <SocialIcon url={metadata.linkedin} color={primaryColor} />
+        <SocialIcon url={metadata.email} color='red' />
       </div>
     )
   }
