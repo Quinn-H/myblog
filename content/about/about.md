@@ -12,3 +12,4 @@ I 'm interested in many things and always learning. I write and share my journey
   - To Document my research or learning progress.
   - To help identify the space for improvement.
   - To practice how to explain somethings more clearly.
+  - and more ...
