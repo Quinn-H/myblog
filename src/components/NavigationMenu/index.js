@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Bio, SocialBar } from '..'
+import { Bio, SocialBar, Weather } from '..'
 import styles from './index.css'
 import { Link } from 'react-router'
 
@@ -16,6 +16,7 @@ export default class NavigationMenu extends Component {
             <Link to={`/portfolio`}>Portfolio</Link>
           </div>
           <SocialBar />
+          <Weather />
         </div>
       </nav>
     )

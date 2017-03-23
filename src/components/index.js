@@ -14,6 +14,7 @@ import PagesList from './PagesList'
 import PagePreview from './PagePreview'
 import PortfolioItem from './PortfolioItem'
 import SocialBar from './SocialBar'
+import Weather from './Weather'
 
 export {
   Container,
@@ -31,5 +32,6 @@ export {
   GitHubBtn,
   BuiltWith,
   PortfolioItem,
-  ContactForm
+  ContactForm,
+  Weather
 }
