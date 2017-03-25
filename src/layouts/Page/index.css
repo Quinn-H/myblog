@@ -1,5 +1,9 @@
-@import '../../media-queries.css';
 @custom-media --single-column only screen and (max-width: 850px);
+
+:root {
+  --navBarWidth: 13rem;
+  --primaryColor: '#0645ad';
+}
 
 .page {
   max-width: var(--pageWidth);
