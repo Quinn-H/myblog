@@ -1,8 +1,8 @@
 ---
+title: About
 author: Quinn Hu
 layout: About
 route: /about/
-title: About
 ---
 
 ## 👨‍💻Welcome to my Blog👨‍💻
