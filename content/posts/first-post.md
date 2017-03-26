@@ -3,6 +3,7 @@ title: First Post, no hero.
 date: 2017-03-22
 layout: Post
 disqus_identifier: 20170322
+route: first-post
 ---
 
 This is the first post!
